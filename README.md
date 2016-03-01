@@ -1,38 +1,62 @@
-Role Name
-=========
+docker-media-converter
+======================
 
-A brief description of the role goes here.
+[![Build Status](https://img.shields.io/travis/marvinpinto/ansible-role-docker-media-converter/master.svg?style=flat-square)](https://travis-ci.org/marvinpinto/ansible-role-docker-media-converter)
+[![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-docker--media--converter-blue.svg?style=flat-square)](https://galaxy.ansible.com/marvinpinto/docker-media-converter)
+[![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
+
+Ansible Galaxy role to manage and run a
+[media-converter](https://github.com/marvinpinto/docker-media-converter) docker
+container.
+
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+This role has been tested on Ubuntu 14.04 and will likely only work on an
+Ubuntu-like system. You will also need a functioning docker environment and a
+recent-is version of `docker-py` for this role to work.
+
+If you have neither and would like ansible to set this up for you, have a look
+at the [marvinpinto.docker](https://galaxy.ansible.com/marvinpinto/docker)
+Galaxy role.
+
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```yaml
+# Docker container name
+docker_media_converter_container_name: 'mediaconverter'
 
-Dependencies
-------------
+# Media directories that need to be mounted inside the container
+docker_media_container_exposed_volumes: []
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+# Container environment variables
+docker_media_container_env_variables: {}
+```
 
-Example Playbook
-----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Examples
+--------
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+Install this module from Ansible Galaxy into the './roles' directory:
+```bash
+ansible-galaxy install marvinpinto.docker-media-converter -p ./roles
+```
 
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Use it in a playbook as follows:
+```yaml
+- hosts: '127.0.0.1'
+  roles:
+    - role: 'marvinpinto.docker-media-converter'
+      become: true
+      docker_media_container_env_variables:
+        MEDIA_TVSHOWS: '/tv'
+        MEDIA_MOVIES: '/movies'
+        PLEX_URL: 'http://127.0.0.1:32400'
+        PLEX_TOKEN: 'sekr3t'
+      docker_media_container_exposed_volumes:
+        - '/opt/data/tv:/tv'
+        - '/opt/data/movies:/movies'
+```

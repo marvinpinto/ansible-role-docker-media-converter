@@ -1,2 +1,12 @@
 ---
-# tasks file for docker-media-converter
+- name: 'Start the media-converter docker container'
+  docker:
+    image: "quay.io/marvin/media-converter"
+    name: "{{ docker_media_converter_container_name }}"
+    env: "{{ docker_media_container_env_variables }}"
+    volumes: "{{ docker_media_container_exposed_volumes }}"
+    state: 'started'
+    restart_policy: 'always'
+    log_driver: 'syslog'
+    log_opt:
+      syslog-tag: "{{ docker_media_converter_container_name }}"

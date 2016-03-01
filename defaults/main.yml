@@ -1,2 +1,9 @@
 ---
-# defaults file for docker-media-converter
+# Docker container name
+docker_media_converter_container_name: 'mediaconverter'
+
+# Media directories that need to be mounted inside the container
+docker_media_container_exposed_volumes: []
+
+# Container environment variables
+docker_media_container_env_variables: {}
